@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flume-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flume-app
+  template:
+    metadata:
+      labels:
+        app: flume-app
+    spec:
+      containers:
+      - image: flumetest:latest
+        name: flume
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 44444
+        volumeMounts:
+        - name: flume-log-volume
+          mountPath: /opt/flume/flume.log
+        env:
+        - name: FLUME_AGENT_NAME
+          value: agent
+        - name: FLUME_CONF_FILE
+          value: /var/tmp/flume-timeinterxeptor.conf
+      volumes:
+      - name: flume-log-volume
+        hostPath:
+          path: /home/narottam/project/springboot/my-flume-interceptor/src/main/resources/flume.log  # Adjust the host path accordingly
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flume-service
+spec:
+  selector:
+    app: flume-app
+  ports:
+    - protocol: TCP
+      port: 44444
+      targetPort: 44444
+  ClusterIP: LoadBalancer  # Change to NodePort or ClusterIP based on your requirements
