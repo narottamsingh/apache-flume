@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   flume:
-    image: flumetest:latest
+    image: flumetestsh:latest
     container_name: flume
     restart: unless-stopped
     volumes:
