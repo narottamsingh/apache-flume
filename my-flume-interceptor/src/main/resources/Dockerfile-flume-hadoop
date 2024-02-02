@@ -1,0 +1,12 @@
+FROM probablyfine/flume
+
+COPY hadoop-3.2.2.tar.gz /tmp/
+RUN tar -xzvf /tmp/hadoop-3.2.2.tar.gz -C /opt/ && rm /tmp/hadoop-3.2.2.tar.gz
+
+COPY vault /opt/vault/vault
+RUN chmod 777 /opt/vault/vault
+
+COPY lib.aws /opt/lib.aws/
+RUN chmod 777 /opt/lib.aws/*
+
+ENTRYPOINT ["start-flume"]
